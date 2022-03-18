@@ -3,10 +3,20 @@
   "version": "1.0.0",
   "description": "",
   "main": "script.js",
+  "type": "module",
   "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  },
+  "dependencies": {
+    "import-http": "^0.3.1",
+    "mongodb": "^4.4.1"
+  }
 }
