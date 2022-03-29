@@ -2,17 +2,24 @@
 // const express = require('express');
 
 import express from 'express';
-import {MongoClient} from 'mongoDB'
+import {MongoClient} from 'mongoDB';
+import dotenv from "dotenv" ;
+// import getmovies from './helper.js'
 const app = express();
-
-const mongoURL="mongodb://localhost";
+// dotenv.config();
+dotenv.config()
+console.log(process.env);
+// const mongoURL="mongodb://localhost";
+const mongoURL="mongodb+srv://Movies:BRUno@cluster0.x7ulm.mongodb.net" ;
 async function createConnection(){
-const client=new MongoClient(mongoURL);
+
+ const client=new MongoClient(mongoURL);
 await client.connect();
 console.log("mongo connection established");
 return client;
 }
-const client= await createConnection();
+
+ const client= await createConnection();
 app.use(express.json());
 
 const Port=4000;
@@ -29,14 +36,17 @@ app.get('/movies',async function (request, response) {
     console.log(movielist);
     response.send(movielist);
 })
+
+
+
 app.get('/movies/:id',async function (request, response) {
     const {id}=request.params;
     // const movie=moviedetails.filter((data)=>data.id===id
     // const movie=moviedetails.find((data)=>data.id===id
 
-    const movie=  await client.db('movies').collection('moviedetails').findOne({id:id});
+    const movie = await client.db('movies').collection('moviedetails').findOne({ id: id });
     console.log(movie);
-    movie ? response.send(movie): response.status(404).send("No Such Movie Found");
+    movie ? response.send(movie) : response.status(404).send("No Such Movie Found");
      
    
 }
@@ -53,6 +63,16 @@ console.log(Addedmovie);
 response.send(Addedmovie);
 })
 
+app.put('/editmovie/:id',async function(request, response) {
+    const {id}=request.params;
+    const editedMovie=request.body;
+    const result=  await client.db('movies')
+    .collection('moviedetails')
+    .updateOne({id:id},{$set:editedMovie});
+response.send(result);
+console.log(result);
+})
+
 app.delete('/movies/:id',async function (request, response) {
     const {id}=request.params;
     // const movie=moviedetails.filter((data)=>data.id===id
@@ -65,4 +85,7 @@ app.delete('/movies/:id',async function (request, response) {
    
 })
 
+
 app.listen(Port,()=>console.log('listening on port 4000'));
+export  default client;
+
