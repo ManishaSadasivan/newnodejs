@@ -4,6 +4,7 @@
 import express from 'express';
 import {MongoClient} from 'mongoDB';
 import dotenv from "dotenv" ;
+import bcrypt from"bcrypt";
 import {getmoviesbyid,getmovies,addnewmovie,deletemovie} from './helper.js'
 import {MovieRouter} from './movie.js';
 const app = express();
@@ -89,7 +90,69 @@ app.delete('/movies/:id',async function (request, response) {
 })
 
 app.use('/movies',MovieRouter)
+
+async function genPassword(password){
+    const salt= await bcrypt.genSalt(10);
+    const hasedpassword= await bcrypt.hash(password, salt);
+    return hasedpassword;
+}
+
+   
+app.post("/user/signup",async function (request,response){
+
+    const {username,password}=request.body;
+console.log(username,password);
+const encryptedpassword= await genPassword(password)
+        const newuser={
+        username:username,
+        password:encryptedpassword,
+    };
+    console.log(encryptedpassword);
+  const result=await client.db('movies')
+  .collection('user')
+  .insertOne(newuser);
+response.send(result);
+})
+
+app.post("/user/login",async function (request, response){
+    const {username,password}=request.body;
+
+    const searchusername= await client.db('movies').collection('user').findOne({username:username});
+   console.log(searchusername);
+if(!searchusername)
+{
+    response.send({message:"invalid credentials"})
+
+}
+else{
+    const searchpassword= searchusername.password;
+    console.log("searchedpassword"+password);
+    const ispasswordmatched=await bcrypt. compare(password,searchpassword);
+    console.log(searchpassword);
+    console.log(ispasswordmatched);
+    if(ispasswordmatched)
+    {
+        response.send({message:"login success"})
+    }
+    else{
+        response.send({message:"invalid credential"})
+    }
+
+}
+   
+})
+
 app.listen(Port,()=>console.log('listening on port 4000'));
+//hashing given password
+// async function genPassword(password){
+// const salt= await bcrypt.genSalt(10);
+// console.log(salt);
+// const hasedPassword=await bcrypt.hash(password,salt);
+// console.log(hasedPassword);
+// }
+// genPassword("manisha");
+
+
 export  default client;
 
 

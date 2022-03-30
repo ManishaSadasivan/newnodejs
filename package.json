@@ -16,6 +16,7 @@
     "nodemon": "^2.0.15"
   },
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "dotenv": "^16.0.0",
     "import-http": "^0.3.1",
     "mongodb": "^4.4.1"
