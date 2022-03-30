@@ -4,7 +4,8 @@
 import express from 'express';
 import {MongoClient} from 'mongoDB';
 import dotenv from "dotenv" ;
-// import getmovies from './helper.js'
+import {getmoviesbyid,getmovies,addnewmovie,deletemovie} from './helper.js'
+import {MovieRouter} from './movie.js';
 const app = express();
 // dotenv.config();
 dotenv.config()
@@ -19,7 +20,7 @@ console.log("mongo connection established");
 return client;
 }
 
- const client= await createConnection();
+ export const client= await createConnection();
 app.use(express.json());
 
 const Port=4000;
@@ -31,35 +32,36 @@ app.get('/', function (request, response) {
 }
 )
 
-app.get('/movies',async function (request, response) {
-    //  response.send(moviedetails)
-    const movielist=  await client.db('movies').collection('moviedetails').find().toArray();
-    console.log(movielist);
-    response.send(movielist);
-})
+// app.get('/movies',async function (request, response) {
+//     //  response.send(moviedetails)
+//     const movielist=  await getmovies();
+//     console.log(movielist);
+//     response.send(movielist);
+// })
+//moving movie related api to movie.js under routes
 
 
 
-app.get('/movies/:id',async function (request, response) {
-    const {id}=request.params;
-    // const movie=moviedetails.filter((data)=>data.id===id
-    // const movie=moviedetails.find((data)=>data.id===id
+// app.get('/movies/:id',async function (request, response) {
+//     const {id}=request.params;
+//     // const movie=moviedetails.filter((data)=>data.id===id
+//     // const movie=moviedetails.find((data)=>data.id===id
 
-    const movie = await client.db('movies').collection('moviedetails').findOne({ id: id });
-    console.log(movie);
-    movie ? response.send(movie) : response.status(404).send("No Such Movie Found");
+//     const movie = await getmoviesbyid(id);
+//     console.log(movie);
+//     movie ? response.send(movie) : response.status(404).send("No Such Movie Found");
      
    
-}
+// }
 
 
-)
+// )
 
 app.post('/addmovie',async function (request, response) {
     //    db.movies.insertMany(newmovie)
    const newmovie=request.body;
    console.log(newmovie);
-const Addedmovie= await client.db('movies').collection('moviedetails').insertMany(newmovie);
+const Addedmovie= await addnewmovie(newmovie);
 console.log(Addedmovie);
 response.send(Addedmovie);
 })
@@ -79,14 +81,18 @@ app.delete('/movies/:id',async function (request, response) {
     // const movie=moviedetails.filter((data)=>data.id===id
     // const movie=moviedetails.find((data)=>data.id===id
 
-    const movie=  await client.db('movies').collection('moviedetails').deleteOne({id:id});
+    const movie=  await deletemovie(id);
     console.log(movie);
     movie ? response.send(movie): response.status(404).send("No Such Movie to DELETE");
      
    
 })
 
-
+app.use('/movies',MovieRouter)
 app.listen(Port,()=>console.log('listening on port 4000'));
 export  default client;
+
+
+
+
 

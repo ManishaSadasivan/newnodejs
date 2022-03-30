@@ -3,14 +3,20 @@ import express from 'express';
 
 const router= express.Router();
 
-function getmovies() {
-    app.get('/movies', async function (request, response) {
-        //  response.send(moviedetails)
-        const movielist = await client.db('movies').collection('moviedetails').find().toArray();
-        console.log(movielist);
-        response.send(movielist);
-    });
+async function getmoviesbyid(id) {
+    return await client.db('movies').collection('moviedetails').findOne({ id: id });
 }
 
+async function getmovies() {
+    return await client.db('movies').collection('moviedetails').find().toArray();
+}
 
-export default {getmovies};
+async function addnewmovie(newmovie) {
+    return await client.db('movies').collection('moviedetails').insertMany(newmovie);
+}
+
+async function deletemovie(id) {
+    return await client.db('movies').collection('moviedetails').deleteOne({ id: id });
+}
+
+export  {getmoviesbyid,getmovies,addnewmovie,deletemovie};
