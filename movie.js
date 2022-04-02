@@ -1,5 +1,5 @@
 import express from 'express';
-import {getmovies,getmoviesbyid} from './helper.js';
+import {getmovies,getmoviesbyid,editMovie} from './helper.js';
 const router=express.Router();
 router.get('/',async function (request, response) {
     //  response.send(moviedetails)
@@ -15,6 +15,14 @@ router.get('/:id',async function (request, response) {
     const movie = await getmoviesbyid(id);
     console.log(movie);
     movie ? response.send(movie) : response.status(404).send("No Such Movie Found");
+})
+
+router.put('/editmovie/:id',async function(request, response) {
+    const {id}=request.params;
+    const editedMovie=request.body;
+    const result=  await editMovie(id, editedMovie);
+response.send(result);
+console.log(result);
 })
  export const MovieRouter = router;
 

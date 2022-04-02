@@ -6,7 +6,7 @@ import {MongoClient} from 'mongoDB';
 import dotenv from "dotenv" ;
 import bcrypt from"bcrypt";
 import jwt from "jsonwebtoken";
-import {getmoviesbyid,getmovies,addnewmovie,deletemovie} from './helper.js'
+import {getmoviesbyid,getmovies,addnewmovie,deletemovie,editMovie} from './helper.js'
 import {MovieRouter} from './movie.js';
 const app = express();
 // dotenv.config();
@@ -68,15 +68,15 @@ console.log(Addedmovie);
 response.send(Addedmovie);
 })
 
-app.put('/editmovie/:id',async function(request, response) {
-    const {id}=request.params;
-    const editedMovie=request.body;
-    const result=  await client.db('movies')
-    .collection('moviedetails')
-    .updateOne({id:id},{$set:editedMovie});
-response.send(result);
-console.log(result);
-})
+//**moving edit movie part into movie,js router  */
+
+// app.put('/editmovie/:id',async function(request, response) {
+//     const {id}=request.params;
+//     const editedMovie=request.body;
+//     const result=  await editMovie(id, editedMovie);
+// response.send(result);
+// console.log(result);
+// })
 
 app.delete('/movies/:id',async function (request, response) {
     const {id}=request.params;
@@ -91,6 +91,8 @@ app.delete('/movies/:id',async function (request, response) {
 })
 
 app.use('/movies',MovieRouter)
+
+
 
 async function genPassword(password){
     const salt= await bcrypt.genSalt(10);
