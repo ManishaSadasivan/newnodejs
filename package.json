@@ -19,6 +19,7 @@
     "bcrypt": "^5.0.1",
     "dotenv": "^16.0.0",
     "import-http": "^0.3.1",
+    "jsonwebtoken": "^8.5.1",
     "mongodb": "^4.4.1"
   }
 }

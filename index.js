@@ -5,6 +5,7 @@ import express from 'express';
 import {MongoClient} from 'mongoDB';
 import dotenv from "dotenv" ;
 import bcrypt from"bcrypt";
+import jwt from "jsonwebtoken";
 import {getmoviesbyid,getmovies,addnewmovie,deletemovie} from './helper.js'
 import {MovieRouter} from './movie.js';
 const app = express();
@@ -132,7 +133,9 @@ else{
     console.log(ispasswordmatched);
     if(ispasswordmatched)
     {
-        response.send({message:"login success"})
+        const token=jwt.sign({id:searchusername._id},'secretkeyy')
+        console.log(token)
+        response.send({message:"login success",token:token})
     }
     else{
         response.send({message:"invalid credential"})
