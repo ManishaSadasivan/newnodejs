@@ -3,7 +3,7 @@
 
 import express from 'express';
 import {MongoClient} from 'mongoDB';
-
+import mongodb from 'mongodb';
 
 import bcrypt from"bcrypt";
 import jwt from "jsonwebtoken";
