@@ -11,8 +11,8 @@ import {getmoviesbyid,getmovies,addnewmovie,deletemovie,editMovie} from './helpe
 import {MovieRouter} from './movie.js';
 const app = express();
 // dotenv.config();
-dotenv.config()
-console.log(process.env);
+// dotenv.config()
+// console.log(process.env);
 // const mongoURL="mongodb://localhost";
 const mongoURL="mongodb+srv://Movies:BRUno@cluster0.x7ulm.mongodb.net" ;
 async function createConnection(){
