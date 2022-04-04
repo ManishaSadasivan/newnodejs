@@ -2,7 +2,7 @@
 // const express = require('express');
 
 import express from 'express';
-import {MongoClient} from 'mongodB';
+import {MongoClient} from 'mongodb';
 
 
 import bcrypt from"bcrypt";
